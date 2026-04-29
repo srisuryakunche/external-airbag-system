@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "author": "External Airbag System",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 200, "left": 50, "attrs": {} },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultra",
+      "top": 49.5,
+      "left": 303.1,
+      "attrs": { "distance": "140" }
+    },
+    { "type": "wokwi-led", "id": "g", "top": 50, "left": 600, "attrs": { "color": "green" } },
+    { "type": "wokwi-led", "id": "y", "top": 100, "left": 600, "attrs": { "color": "yellow" } },
+    { "type": "wokwi-led", "id": "r", "top": 150, "left": 600, "attrs": { "color": "red" } },
+    { "type": "wokwi-led", "id": "a", "top": 200, "left": 600, "attrs": { "color": "blue" } },
+    { "type": "wokwi-buzzer", "id": "buzz", "top": 120, "left": 500, "attrs": {} },
+    { "type": "wokwi-logic-analyzer", "id": "logic", "top": 19.55, "left": 748.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "uno:5V", "ultra:VCC", "red", [] ],
+    [ "uno:GND", "ultra:GND", "black", [] ],
+    [ "uno:9", "ultra:TRIG", "green", [] ],
+    [ "uno:10", "ultra:ECHO", "blue", [] ],
+    [ "uno:4", "g:A", "green", [] ],
+    [ "g:C", "uno:GND", "black", [] ],
+    [ "uno:5", "y:A", "yellow", [] ],
+    [ "y:C", "uno:GND", "black", [] ],
+    [ "uno:6", "r:A", "red", [] ],
+    [ "r:C", "uno:GND", "black", [] ],
+    [ "uno:8", "a:A", "purple", [] ],
+    [ "a:C", "uno:GND", "black", [] ],
+    [ "uno:7", "buzz:1", "orange", [] ],
+    [ "buzz:2", "uno:GND", "black", [] ],
+    [ "logic:CH1", "uno:9", "green", [] ],
+    [ "logic:CH2", "uno:10", "blue", [] ],
+    [ "logic:D0", "uno:9", "green", [ "h-529.2", "v181.95" ] ],
+    [ "logic:D1", "uno:10", "green", [ "h-548.4", "v162.75" ] ],
+    [ "logic:GND", "uno:GND.1", "black", [ "h-586.8", "v105.15" ] ]
+  ],
+  "dependencies": {}
+}

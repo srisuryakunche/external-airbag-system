@@ -1,0 +1,91 @@
+// -------- PIN DEFINITIONS --------
+#define TRIG 9
+#define ECHO 10
+
+#define GREEN_LED 4     // Safe
+#define YELLOW_LED 5    // Warning
+#define RED_LED 6       // Critical
+
+#define BUZZER 7
+#define AIRBAG 8
+
+long duration;
+int distance;
+
+// -------- SETUP --------
+void setup() {
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(YELLOW_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+
+  pinMode(BUZZER, OUTPUT);
+  pinMode(AIRBAG, OUTPUT);
+
+  Serial.begin(9600);
+}
+
+// -------- MAIN LOOP --------
+void loop() {
+
+  // Send trigger pulse
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+
+  // Read echo pulse
+  duration = pulseIn(ECHO, HIGH, 30000);
+
+  if (duration == 0) {
+    Serial.println("No object detected");
+    turnOffAll();
+    return;
+  }
+
+  // Calculate distance (cm)
+  distance = duration * 0.034 / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Reset everything
+  turnOffAll();
+
+  // -------- DECISION LOGIC --------
+  if (distance > 100) {
+    // SAFE
+    digitalWrite(GREEN_LED, HIGH);
+  }
+
+  else if (distance > 50) {
+    // WARNING (medium beep)
+    digitalWrite(YELLOW_LED, HIGH);
+
+    tone(BUZZER, 1000);   // 1 kHz tone
+  }
+
+  else {
+    // CRITICAL (fast/high beep)
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(AIRBAG, HIGH);
+
+    tone(BUZZER, 2000);   // 2 kHz tone
+  }
+
+  delay(200);
+}
+
+// -------- RESET FUNCTION --------
+void turnOffAll() {
+  digitalWrite(GREEN_LED, LOW);
+  digitalWrite(YELLOW_LED, LOW);
+  digitalWrite(RED_LED, LOW);
+  digitalWrite(AIRBAG, LOW);
+
+  noTone(BUZZER);  // stop sound
+}
